@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+asyncpg
+pydantic
+pydantic-settings
+python-jose[cryptography]
+bcrypt
+uuid6
+pytest

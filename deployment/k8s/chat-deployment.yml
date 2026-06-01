@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-dome-deployment
+  namespace: default
+  labels:
+    app: chatdome
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: chatdome
+
+  template:
+    metadata:
+      labels:
+        app: chatdome
+    spec:
+      containers:
+        - name: chatdome
+          image: chatdome/app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: chatdome-secrets # name of the k8s Secret containing environment variables ie in metadata.name of the secret
+          env:
+            - name: ENV
+              value: production
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      restartPolicy: Always

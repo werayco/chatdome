@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chatdome-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: chatdome.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-dome-service
+                port:
+                  number: 80
