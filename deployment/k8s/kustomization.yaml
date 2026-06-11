@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - secrets.yml
+  - db-service.yml
+  - db-statefulset.yml
+  - chat-deployment.yml
+  - chat-service.yml
+  - hpa.yml
+  - ingress.yml
+
+commonAnnotations:
+  env: development
+  support-contact: werayco@gmail.com

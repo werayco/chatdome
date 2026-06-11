@@ -17,11 +17,3 @@ class User(Base):
     username: Mapped[str] = mapped_column(String, unique=True, nullable=False, index=True)
     cover_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     password: Mapped[str] = mapped_column(String, nullable=False)
-
-
-# class UserActiveStatus(Base):
-#     __tablename__ = "active"
-#     online_status: Mapped[bool] = mapped_column(default=False, nullable=False)
-#     user_id: Mapped[UUID] = mapped_column(
-#         Uuid, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
-#     )

@@ -4,15 +4,21 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 
 class GroupModify(BaseModel):
-    group_id : UUID
+    group_id : Optional[UUID] = None
+    group_name: Optional[str] = None
     new_name: Optional[str] = None
-    target_user_id: Optional[UUID] = None
+    target_username: Optional[str] = None
 
 
 class AddUserToGroupRequest(BaseModel):
-    name: str
     member_ids: list[UUID] = None
+    group_name: Optional[str] = None
     members_username: list[str]
+
+class RemoveUserFromGroupRequest(BaseModel):
+    group_name: Optional[str] = None
+    members_username: list[str]
+
 
 class CreateDMRequest(BaseModel):
     receiver_username: str
