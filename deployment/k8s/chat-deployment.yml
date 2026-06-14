@@ -8,7 +8,6 @@ metadata:
 
 spec:
   replicas: 3
-
   selector:
     matchLabels:
       app: chatdome
@@ -17,16 +16,17 @@ spec:
     metadata:
       labels:
         app: chatdome
+
     spec:
       containers:
         - name: chatdome
-          image: chatdome/app:latest
-          imagePullPolicy: IfNotPresent
+          image: werayco/chatdome:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           envFrom:
             - secretRef:
-                name: chatdome-secrets # name of the k8s Secret containing environment variables ie in metadata.name of the secret
+                name: chatdome-secrets # name of the k8s Secret object containing environment variables ie in metadata.name of the secret
           env:
             - name: ENV
               value: production
@@ -37,6 +37,13 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
+
+          startupProbe:
+            httpGet:  
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /health

@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: chatdome
+  namespace: argocd # the Application object lives in the argocd namespace
+  finalizers:
+    # ensures child resources are pruned when the Application is deleted
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/werayco/chatdome.git
+    targetRevision: main
+    path: deployment/k8s # kustomize app dir; Argo auto-detects kustomization.yaml
+
+  destination:
+    server: https://kubernetes.default.svc # the cluster Argo runs in
+    namespace: default # where chatdome workloads are deployed
+
+  syncPolicy:
+    automated:
+      prune: true # delete resources removed from git
+      selfHeal: true # revert out-of-band changes back to git state
+    syncOptions:
+      - CreateNamespace=true

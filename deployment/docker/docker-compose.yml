@@ -18,13 +18,14 @@ services:
         - chatdome_network
 
     backend:
-      build:
-        context: ../..
-        dockerfile: deployment/docker/Dockerfile
+      # build:
+      #   context: ../..
+      #   dockerfile: deployment/docker/Dockerfile
+      image: werayco/chatdome:latest
       container_name: chatdome-backend
       restart: unless-stopped
-      volumes:
-        - ../../app:/app/app
+      # volumes:
+        # - ../../app:/app/app
       env_file:
         - ./.env
       ports:

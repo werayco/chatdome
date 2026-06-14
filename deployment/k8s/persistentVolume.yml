@@ -1,11 +1,21 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-    name: chat-dome
+  name: postgres-pv
 spec:
-    capacity:
-        storage: 5Gi
-    accessModes:
-        - ReadWriteOnce
-    hostPath:
-      path: /data/chat-dome
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /data/postgres
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - worker-node-1
