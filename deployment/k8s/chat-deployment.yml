@@ -29,6 +29,7 @@ spec:
             capabilities:
               drop:
                 - ALL   
+          dnsPolicy: ClusterFirst
           ports:
             - containerPort: 8000
           envFrom:
