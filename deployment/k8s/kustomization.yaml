@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
   - storageclass.yml
   - persistentvolume.yml
-  - secrets.yml
   - db-service.yml
   - db-statefulset.yml
   - chat-deployment.yml
