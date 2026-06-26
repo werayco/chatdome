@@ -8,6 +8,7 @@ from app.db.session import engine, get_db
 from app.db.base import Base
 from app.config.settings import settings
 from app.routers import chat
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:

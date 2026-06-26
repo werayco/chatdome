@@ -25,7 +25,7 @@ services:
       container_name: chatdome-backend
       restart: unless-stopped
       # volumes:
-        # - ../../app:/app/app
+        # - ../../app:/app/app # uncomment this line to mount the app directory for development
       env_file:
         - ./.env
       ports:
