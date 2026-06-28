@@ -3,15 +3,15 @@ kind: Ingress
 metadata:
   name: chatdome-ingress
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod" # name of ClusterIssuer
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
   ingressClassName: traefik
-  tls: 
+  tls:
     - hosts:
-        - devrayco.name.ng
-      secretName: chatdome-tls-secret 
+        - chatdome.devrayco.name.ng
+      secretName: chatdome-tls-secret
   rules:
     - host: chatdome.devrayco.name.ng
       http:
