@@ -13,7 +13,7 @@ spec:
         - devrayco.name.ng
       secretName: chatdome-tls-secret 
   rules:
-    - host: devrayco.name.ng
+    - host: chatdome.devrayco.name.ng
       http:
         paths:
           - path: /
