@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/werayco/chatdome.git
     targetRevision: main
-    path: deployment/k8s
+    path: deployment/k8s/overlays/prod
 
   destination:
     server: https://kubernetes.default.svc
@@ -19,7 +19,7 @@ spec:
 
   syncPolicy:
     automated:
-      prune: true # this delete resources removed from git
-      selfHeal: true # revert out-of-band changes back to git state
+      prune: true
+      selfHeal: true 
     syncOptions:
       - CreateNamespace=true

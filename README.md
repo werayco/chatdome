@@ -57,12 +57,6 @@ ws://localhost:8000/chat/ws/{conversation_id}?token=<access_token>
 
 Clients can send messages in JSON format and receive real-time updates from other participants.
 
-## Testing
-
-```bash
-pytest
-```
-
 ## Deployment
 
 Kubernetes manifests are available in `deployment/k8s/` for deploying the API, PostgreSQL, ingress, autoscaling, and related resources.
