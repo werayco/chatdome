@@ -8,3 +8,4 @@ python-jose[cryptography]
 bcrypt
 uuid6
 pytest
+sentry-sdk

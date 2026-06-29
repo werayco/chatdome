@@ -1,54 +1,97 @@
 services:
-    postgres:
-      image: postgres:16
-      container_name: chatdome-postgres
-      restart: unless-stopped
-      env_file:
-        - ./.env
-      ports:
-        - "5432:5432"
-      volumes:
-        - chatdome_data:/var/lib/postgresql/data
-      healthcheck:
-        test: ["CMD-SHELL", "pg_isready -U domeadmin -d dome"]
-        interval: 10s
-        timeout: 5s
-        retries: 5
-      networks:
-        - chatdome_network
+  postgres:
+    image: postgres:16
+    container_name: chatdome-postgres
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - chatdome_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U domeadmin -d dome"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - chatdome_network
 
-    backend:
-      # build:
-      #   context: ../..
-      #   dockerfile: deployment/docker/Dockerfile
-      image: werayco/chatdome:latest
-      container_name: chatdome-backend
-      restart: unless-stopped
-      # volumes:
-        # - ../../app:/app/app # uncomment this line to mount the app directory for development
-      env_file:
-        - ./.env
-      ports:
-        - "8000:8000"
-      command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-      depends_on:
-        postgres:
-          condition: service_healthy
-      networks:
-        - chatdome_network
-      healthcheck:
-        test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
-        interval: 10s
-        timeout: 5s
-        retries: 5
-      deploy:
-        resources:
-          limits:
-            cpus: '0.5'
-            memory: 512M
-          reservations:
-            cpus: '0.25'
-            memory: 256M
+  backend:
+    build:
+      context: ../..
+      dockerfile: deployment/docker/Dockerfile
+    # image: werayco/chatdome:latest
+    container_name: chatdome-backend
+    restart: unless-stopped
+    volumes:
+      - ../../app:/app/app
+    env_file:
+      - ./.env
+    ports:
+      - "8000:8000"
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - chatdome_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  redis:
+    image: redis:7
+    container_name: chatdome-redis
+    restart: unless-stopped
+    networks:
+      - chatdome_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  glitchtip-web:
+    image: glitchtip/glitchtip:latest
+    container_name: chatdome-glitchtip-web
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - ./.env
+    ports:
+      - "8080:8080"
+    networks:
+      - chatdome_network
+
+  glitchtip-worker:
+    image: glitchtip/glitchtip:latest
+    container_name: chatdome-glitchtip-worker
+    restart: unless-stopped
+    command: ./bin/run-celery-with-beat.sh
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - ./.env
+    networks:
+      - chatdome_network
 
 volumes:
   chatdome_data:

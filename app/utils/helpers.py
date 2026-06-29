@@ -2,20 +2,20 @@ from datetime import datetime, timedelta, timezone
 from uuid import UUID
 import bcrypt
 from jose import jwt, JWTError
-from sqlalchemy import select
+from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends, HTTPException, WebSocket, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.config.settings import settings
-from app.db.session import get_db
-from fastapi import WebSocket
 from app.models.user import User
+from app.db.session import get_db
+from app.models import Conversation, ConversationType
+from app.config.schemas import GroupModify
 from sqlalchemy.ext.asyncio import AsyncSession
 from jose import jwt, JWTError
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 REFRESH_TOKEN_EXPIRE_DAYS = 7
-
 
 bearer_scheme = HTTPBearer()
 
@@ -137,3 +137,24 @@ def verify_password(password: str, hashed_password: str) -> bool:
     password_bytes = password.encode('utf-8')
     hashed_bytes = hashed_password.encode('utf-8')    
     return bcrypt.checkpw(password_bytes, hashed_bytes)
+
+async def _resolve_group_id(payload: GroupModify, db: AsyncSession) -> UUID:
+    if not payload.group_name:
+        raise HTTPException(status_code=400, detail="group_name is required")
+
+    rows = (await db.execute(
+        select(Conversation.id).where(
+            and_(
+                Conversation.name == payload.group_name.strip(),
+                Conversation.type == ConversationType.GROUP,
+            )
+        )
+    )).scalars().all()
+    if not rows:
+        raise HTTPException(status_code=404, detail="Group not found")
+    if len(rows) > 1:
+        raise HTTPException(
+            status_code=409,
+            detail="Multiple groups share that name; rename one so the name is unique",
+        )
+    return rows[0]
