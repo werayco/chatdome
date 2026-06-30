@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import os
+import sentry_sdk
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
@@ -8,7 +9,13 @@ from app.db.session import engine, get_db
 from app.db.base import Base
 from app.config.settings import settings
 from app.routers import chat
+import logging
 
+sentry_sdk.init(
+    dsn=settings.GLITCHTIP_DSN,
+    traces_sample_rate=0.01,
+    auto_session_tracking=False,
+)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
@@ -30,3 +37,8 @@ app.add_middleware(
 @app.get("/health")
 async def root():
     return {"message": "Hello, World!"}
+
+
+@app.get("/debug-sentry")
+async def trigger_error():
+    return 1/0

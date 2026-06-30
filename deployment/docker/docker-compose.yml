@@ -66,6 +66,7 @@ services:
     image: glitchtip/glitchtip:latest
     container_name: chatdome-glitchtip-web
     restart: unless-stopped
+    command: sh -c "./manage.py migrate && ./bin/start.sh"
     depends_on:
       postgres:
         condition: service_healthy
