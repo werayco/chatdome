@@ -36,7 +36,7 @@ app.add_middleware(
 
 @app.get("/health")
 async def root():
-    return {"message": "Hello, World!"}
+    return {"message": "ChatDome is active!"}
 
 
 @app.get("/debug-sentry")
