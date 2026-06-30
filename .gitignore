@@ -4,3 +4,4 @@ __pycache__/
 get_helm.sh
 deployment/docker/.env
 sample/
+./.ruff_cache
