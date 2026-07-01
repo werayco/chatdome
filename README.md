@@ -4,7 +4,7 @@ A real-time chat backend built with FastAPI and PostgreSQL.
 
 Users can register, log in, start direct messages, create group chats, and exchange messages over WebSockets. Authentication is handled with JWTs, data is stored in PostgreSQL, and the application runs in Docker. This repository contains only the backend API.
 
-![alt text](images/image-2.png)
+![alt text](images/image-3.png)
 ## Features
 
 * User authentication (register, login, refresh tokens, change password)
