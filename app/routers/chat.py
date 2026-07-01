@@ -84,7 +84,7 @@ async def change_group_name(payload: GroupModify, db: AsyncSession = Depends(get
 
 @router.post("/conversations/modify/makeAdmin")
 async def make_another_user_admin(payload: GroupModify, db: AsyncSession = Depends(get_db), auth_user: dict = Depends(get_current_user)):
-    return await ChatController.get_all_group_users(payload, db, auth_user)
+    return await ChatController.make_another_user_admin(payload, db, auth_user)
 
 @router.post("/conversation/getUsersInConversation")
 async def get_all_group_users(payload: GroupModify, db: AsyncSession = Depends(get_db), auth_user: dict = Depends(get_current_user)):
