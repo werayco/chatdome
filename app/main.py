@@ -33,11 +33,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/health")
 async def root():
-    return {"message": "ChatDome is active!"}
-
+    return {"message": "ChatDome is active", "version": "1.0.0"}
 
 @app.get("/debug-sentry")
 async def trigger_error():
