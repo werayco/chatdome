@@ -18,10 +18,10 @@ services:
       - chatdome_network
 
   backend:
-    # build:
-    #   context: ../..
-    #   dockerfile: deployment/docker/Dockerfile # comment out during dev
-    image: werayco/chatdome:latest # comment during dev
+    build:
+      context: ../..
+      dockerfile: deployment/docker/Dockerfile # comment out during dev
+    # image: werayco/chatdome:latest # comment during dev
     container_name: chatdome-backend
     restart: unless-stopped
     # volumes:
@@ -33,6 +33,8 @@ services:
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - chatdome_network
@@ -51,16 +53,18 @@ services:
           memory: 256M
 
   redis:
-    image: redis:7
-    container_name: chatdome-redis
-    restart: unless-stopped
-    networks:
-      - chatdome_network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      image: redis:7-alpine
+      container_name: chatdome-redis
+      restart: unless-stopped
+      volumes:
+        - chatdome_redis:/var/lib/redis/data
+      networks:
+        - chatdome_network
+      healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
 
   glitchtip-web:
     image: glitchtip/glitchtip:latest
@@ -96,6 +100,7 @@ services:
 
 volumes:
   chatdome_data:
+  chatdome_redis:
 
 networks:
   chatdome_network:

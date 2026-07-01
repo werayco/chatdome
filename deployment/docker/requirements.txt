@@ -9,3 +9,4 @@ bcrypt
 uuid6
 pytest
 sentry-sdk
+redis[hiredis]>=5.0.0

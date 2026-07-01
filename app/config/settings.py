@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     REDIS_URL: str
     SECRET_KEY: str
     PORT: str
+    REDIS_URL: str
     GLITCHTIP_DOMAIN: str
     DEFAULT_FROM_EMAIL: str
     EMAIL_URL: str

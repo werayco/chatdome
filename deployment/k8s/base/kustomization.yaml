@@ -5,6 +5,8 @@ resources:
   - persistentvolume.yml
   - db-service.yml
   - db-statefulset.yml
+  - redis-deployment.yml
+  - redis-service.yml
   - chat-deployment.yml
   - chat-service.yml
   - hpa.yml
