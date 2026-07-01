@@ -38,3 +38,9 @@ backend-shell:
 	docker exec -it chatdome-backend /bin/sh
 clean:
 	docker compose -f deployment/docker/docker-compose.yml down -v
+git:
+	git add .
+	git commit -m "$(filter-out $@,$(MAKECMDGOALS))"
+	git push
+%:
+	@:

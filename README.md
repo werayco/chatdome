@@ -28,8 +28,16 @@ Users can register, log in, start direct messages, create group chats, and excha
 ## Quick Start
 
 ```bash
-cd deployment/docker
-docker compose up --build
+docker compose -f deployment/docker/docker-compose.yml up --build -d 
+```
+
+(or) You can use the *Make* command. make sure you have *Make* installed on your machine, if you don't have it installed, use 
+```bash
+sudo apt-get update && sudo apt-get install make
+```
+After installing, hit:
+```bash
+Make run
 ```
 
 Once running:
@@ -40,6 +48,11 @@ Once running:
 
 ## Environment Variables
 
+Generate any secret key using:
+```bash
+make gen-secret
+```
+
 Required:
 
 ```env
@@ -48,6 +61,14 @@ JWT_SECRET=
 POSTGRES_USER=
 POSTGRES_PASSWORD=
 POSTGRES_DB=
+REDIS_URL=
+SECRET_KEY= 
+PORT=8080
+GLITCHTIP_DOMAIN=
+DEFAULT_FROM_EMAIL=
+EMAIL_URL=consolemail://
+ACCOUNT_EMAIL_VERIFICATION=none
+GLITCHTIP_DSN=
 ```
 
 ## WebSocket Endpoint
@@ -60,4 +81,4 @@ Clients can send messages in JSON format and receive real-time updates from othe
 
 ## Deployment
 
-Kubernetes manifests are available in `deployment/k8s/` for deploying the API, PostgreSQL, ingress, autoscaling, and related resources.
+Kubernetes manifests are available in [`deployment/k8s/`](./deployment/k8s) for deploying the API, PostgreSQL, ingress, autoscaling, and related resources.
