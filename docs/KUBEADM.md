@@ -498,12 +498,18 @@ Create the application secret - never commit credentials to git:
 
 ```bash
 kubectl create secret generic chatdome-secrets \
-  --from-literal=DATABASE_URL="postgresql+asyncpg://domeadmin:<password>@postgres:5432/dome" \
-  --from-literal=JWT_SECRET="<secret>" \
+  --from-literal=DATABASE_URL="postgresql+asyncpg://domeadmin:db-password@postgres:5432/dome" \
   --from-literal=POSTGRES_USER="domeadmin" \
-  --from-literal=POSTGRES_PASSWORD="<password>" \
+  --from-literal=POSTGRES_PASSWORD="db-password" \
   --from-literal=POSTGRES_DB="dome" \
-  -n default
+  --from-literal=SECRET_KEY="" \
+  --from-literal=JWT_SECRET="" \
+  --from-literal=PORT="8000" \
+  --from-literal=REDIS_URL="redis://chatdome-redis:6379" \
+  --from-literal=GLITCHTIP_DOMAIN="https://errors.devrayco.name.ng" \
+  --from-literal=DEFAULT_FROM_EMAIL="errors@devrayco.name.ng" \
+  --from-literal=EMAIL_URL="consolemail://" \
+  --from-literal=GLITCHTIP_DSN="https://dsn-gotten-from-glitchtip-ui"
 ```
 
 ### Deploy via ArgoCD
