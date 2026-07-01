@@ -16,7 +16,9 @@ start-minikube:
 	minikube start
 add-node:
 	minikube node add
-pods-nodes-location:
+watch:
+	kubectl get pods -w
+pods:
 	kubectl get pods -o wide
 dev-run:
 	kubectl apply -k deployment/k8s/overlays/dev

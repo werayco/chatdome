@@ -1,7 +1,10 @@
-```markdown
 # GlitchTip Setup for ChatDome
 
 Self-hosted error tracking for the ChatDome backend, running alongside the existing Docker Compose stack.
+
+
+##
+![alt text](../images/image-1.png)
 
 ## Stack overview
 
@@ -53,6 +56,9 @@ GLITCHTIP_DSN=http://<public_key>@glitchtip-web:8080/<project_id>
    ```
 
 5. Visit `http://localhost:8080`, log in, and create an organization (e.g. `ChatDome`).
+
+##
+![alt text](../images/image-1.png)
 
 6. Create a project under that organization. Choose **Python** as the platform (FastAPI doesn't have a dedicated SDK option - plain Python covers it).
 
